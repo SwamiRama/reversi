@@ -1,5 +1,5 @@
 class Player
-  attr_reader :tile
+  @tile
 
   def initialize(is_first)
     if is_first
@@ -8,4 +8,7 @@ class Player
       @tile = 'O'
     end
   end  
+
+  def set_tile(row, col, board)
+    board.set_tile(row, col, @tile)
 end
