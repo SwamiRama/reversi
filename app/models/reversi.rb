@@ -45,6 +45,10 @@ class Reversi
     end
   end
 
+  def draw
+    @board.draw
+  end
+
   private
   def game_over?
     return false
@@ -56,8 +60,8 @@ class Reversi
       -1.upto(1) { |col_direction|
         if row_direction != 0 || col_direction != 0
           adjacent_stones = get_adjacent_stones(row, col, row_direction, col_direction)
-          puts "start set_tile loop"
           while adjacent_stones.empty?            
+            puts "start set_tile loop"
             position = adjacent_stones.pop
             @board.set_tile(position[:row], position[:col], @current_player)
           end
@@ -91,8 +95,8 @@ class Reversi
     check_col = col + col_direction
 
     fields = []
-    puts "start get_adjacent_stones loop"
     while @board.on_board?(check_row, check_col)
+      puts "start get_adjacent_stones loop"
       slot = @board.get_tile(check_row, check_col)
       if @current_player == slot
         return fields
@@ -102,7 +106,7 @@ class Reversi
         slot << {:row => check_row, :col => check_col}
       end
       check_row = check_row + row_direction
-      check_col = check_col * col_direction
+      check_col = check_col + col_direction
     end
     return nil    
   end
