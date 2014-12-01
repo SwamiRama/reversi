@@ -14,35 +14,32 @@ class Board
     end
   end
 
-  def set_tile_allowed?(row, col, new_tile)
+  def set_tile_allowed?(row, col)
     if on_board?(row, col)
-      good_move = true 
       @tile_positions.each do |tile|
         if tile[:row] == row && tile[:col] == col
           puts "move not allowed, there is already a tile!"
-          good_move = false
+          return false
         end
-      end
-      if good_move
-        return true
       end
     else
       return false
     end
+    return true
   end
 
   def change_tile(row, col, current_player)
-    if get_slot(row, col) != current_player
+    if get_tile(row, col) != current_player
       @tile_positions.each do |tile|
         if tile[:row] == row && tile[:col] == col
-          @tile_positions << {:tile => current_player, :row => row, :col => col}
+          tile[:tile] = current_player
         end
       end
     end
   end
 
   def set_tile(row, col, current_player)
-    if set_tile_allowed?(row, col, current_player)
+    if set_tile_allowed?(row, col)
       @tile_positions << {:tile => current_player, :row => row, :col => col}
     end
   end
@@ -57,15 +54,12 @@ class Board
   end
 
   def get_tile(row, col)
-    located_tile = ''
     @tile_positions.each do |tile|
       if tile[:row] == row && tile[:col] == col
-        located_tile = tile[:tile]
-      else
-        located_tile = nil
+        return tile[:tile]
       end
     end
-    located_tile
+    return nil
   end
 
 

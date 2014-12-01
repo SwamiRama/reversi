@@ -62,10 +62,10 @@ class Reversi
           adjacent_stones = []
           adjacent_stones = get_adjacent_stones(row, col, row_direction, col_direction)
           if !adjacent_stones.nil?
-            while adjacent_stones.empty?            
+            while !adjacent_stones.empty?            
               puts "start set_tile loop"
               position = adjacent_stones.pop
-              @board.set_tile(position[:row], position[:col], @current_player)
+              @board.change_tile(position[:row], position[:col], @current_player)
             end
           end
         end
@@ -74,19 +74,21 @@ class Reversi
   end
 
   def is_move_allowed?(row, col)
-    if @board.set_tile_allowed?(row, col, @current_player)
+    good_move = false
+    if @board.set_tile_allowed?(row, col)
       -1.upto(1) { |row_direction|
         -1.upto(1) { |col_direction|
           if row_direction != 0 || col_direction != 0
             adjacent_stones = get_adjacent_stones(row, col, row_direction, col_direction)
             if !adjacent_stones.nil? 
              if !adjacent_stones.empty?
-               return true
+               return good_move = true
              end
             end
           end
         }
       }
+      good_move
     else
       return false
     end
@@ -102,7 +104,7 @@ class Reversi
 
     fields = []
     while @board.on_board?(check_row, check_col)
-      puts "start get_adjacent_stones loop on row = " + check_row.to_s + " and col = " + check_col.to_s
+      #puts "start get_adjacent_stones loop on row = " + check_row.to_s + " and col = " + check_col.to_s
       slot = @board.get_tile(check_row, check_col)
       if @current_player == slot
         return fields
