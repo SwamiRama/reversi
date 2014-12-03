@@ -64,9 +64,9 @@ class Board
 
 
   def draw
-    0.upto(SIZE - 1) { |row|
+    0.upto(SIZE - 1) do |row|
       board = "|"
-      0.upto(SIZE - 1) { |col|
+      0.upto(SIZE - 1) do |col|
         if $DEBUG
           puts 'col = ' + col.to_s + ', row = ' + row.to_s
           puts @tile_positions
@@ -83,8 +83,22 @@ class Board
         if !stone.nil?
           board << stone + "|"
         end
-      }
+      end
       puts board
-    }
+    end
+  end
+
+  def count_tiles_for_player(player)
+    count = 0
+    @tile_positions.each do |tile|
+      if tile[:tile] == tile
+        count += 1
+      end    
+    end
+    return count
+  end
+
+  def count_all_tiles
+    return @tile_positions.count
   end
 end
