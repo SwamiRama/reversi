@@ -64,8 +64,9 @@ class Board
 
 
   def draw
+    puts ' |0|1|2|3|4|5|6|7|'
     0.upto(SIZE - 1) do |row|
-      board = "|"
+      board = "#{row}|"
       0.upto(SIZE - 1) do |col|
         if $DEBUG
           puts 'col = ' + col.to_s + ', row = ' + row.to_s

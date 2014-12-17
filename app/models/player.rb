@@ -1,6 +1,5 @@
 class Player
-  @tile
-
+  attr_accessor :tile
   def initialize(is_first)
     if is_first
       @tile = 'X'
@@ -9,6 +8,15 @@ class Player
     end
   end  
 
-  def set_tile(row, col, board)
-    board.set_tile(row, col, @tile)
+  def get_opponent_tile
+    self.tile == 'O' ? 'X' : 'O'
+  end
+
+  def change_player
+    if self.tile == 'O'
+      @tile = 'X'
+    else
+      @tile = 'O'
+    end
+  end
 end
