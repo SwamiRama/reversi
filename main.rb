@@ -5,7 +5,6 @@ require 'pry'
 
 @reversi = Reversi.new
 
-
 def input_handler(input)
   case input
   when 'move', 'm'
@@ -23,7 +22,7 @@ def input_handler(input)
 end
 
 pp 'Welcome to Reversi'
-while(!@reversi.game_over? || !@quit)
+while(!@reversi.game_over? && !@quit)
   pp 'current Player = ' + @reversi.current_player
   input = gets.delete("\n")
   input_handler(input)

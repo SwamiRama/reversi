@@ -21,7 +21,7 @@ class Reversi
   def move(row, col)
     if game_over?
       puts 'game over!'
-    elsif is_move_allowed?(row, col, @board)
+    elsif is_move_allowed?(@player, @board, row, col)
       set_tile(row, col)
       next_player
       @current_player = @player.tile
@@ -35,7 +35,7 @@ class Reversi
     if @DEBUG
       puts "player.tile = " + @player.tile
     end
-    if move_possible_for_player?(@player.get_opponent_tile)
+    if move_possible_for_player?(@player)
       @player.change_player
     end
   end
@@ -54,7 +54,7 @@ class Reversi
       -1.upto(1) do |col_direction|
         if row_direction != 0 || col_direction != 0
           adjacent_stones = []
-          adjacent_stones = get_adjacent_stones(row, col, row_direction, col_direction)
+          adjacent_stones = get_adjacent_stones(@player, @board, row, col, row_direction, col_direction)
           if !adjacent_stones.nil?
             while !adjacent_stones.empty?            
               puts "start set_tile loop"
@@ -67,13 +67,13 @@ class Reversi
     end
   end
 
-  def is_move_allowed?(row, col, board)
+  def is_move_allowed?(player, board, row, col)
     good_move = false
     if board.set_tile_allowed?(row, col)
       -1.upto(1) do |row_direction|
         -1.upto(1) do |col_direction|
           if row_direction != 0 || col_direction != 0
-            adjacent_stones = get_adjacent_stones(row, col, row_direction, col_direction)
+            adjacent_stones = get_adjacent_stones(player, board, row, col, row_direction, col_direction)
             if !adjacent_stones.nil? 
              if !adjacent_stones.empty?
                return good_move = true
@@ -93,13 +93,13 @@ class Reversi
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
         if test_board.set_tile_allowed?(row,col)
-          is_move_allowed?(row, col, test_board)
+          is_move_allowed?(player, test_board, row, col)
         end
       end
     end
   end
 
-  def get_adjacent_stones(row, col, row_direction, col_direction)
+  def get_adjacent_stones(player, board, row, col, row_direction, col_direction)
     if row_direction == 0 && col_direction == 0
       raise "there is no direction"
     end
@@ -108,10 +108,10 @@ class Reversi
     check_col = col + col_direction
 
     fields = []
-    while @board.on_board?(check_row, check_col)
+    while board.on_board?(check_row, check_col)
       #puts "start get_adjacent_stones loop on row = " + check_row.to_s + " and col = " + check_col.to_s
-      slot = @board.get_tile(check_row, check_col)
-      if @player.tile == slot
+      slot = board.get_tile(check_row, check_col)
+      if player.tile == slot
         return fields
       elsif slot.nil?
         return nil

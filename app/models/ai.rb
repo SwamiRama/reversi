@@ -10,8 +10,8 @@ class Ai
     [9999, 5, 500, 200, 200, 500, 5, 9999] 
   ]
 
-  def initialize(token)
-    @player_ai = token
+  def initialize(tile)
+    @player_ai = tile
   end
 
   def move(level, board, reversi)
@@ -84,18 +84,50 @@ class Ai
   end
 
   def score_mobility
-
+    mobility_human = score_mobility(@player_human)
+    mobility_machine = score_mobility(@player_ai)
+    return (64.0 / count_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
   end
 
   def score_mobility(player)
-
+    mobility_count = 0
+    0.upto(Board::SIZE) do |row|
+      0.upto(Board::SIZE) do |col|
+        if @reversi.is_move_allowed?(player, @board, row, col)
+          mobility_count += 1
+        end
+      end
+    end
   end
 
   def score_potential
-
+    potential_human = score_potential(@player_human)
+    potential_machine = score_potential(@player_ai)
+    return (64.0 / (2 * count_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
   end
 
   def score_potential(player)
+    potential_count = 0
+    opponent = player.get_opponent_tile
+    @tile_position.each do |tile|
+      if tile == opponent
+        potential_count += count_surrounding_empty_slot(row, col)
+      end
+    end
+  end
 
+  def count_surrounding_empty_slot(row, col)
+    empty_slot_count = 0
+    -1.upto(1) do |row_direction|
+      -1.upto(1) do |col_direction|
+        if row_direction != 0 || col_direction != 0
+          check_row = row + row_direction
+          check_col = col + col_direction
+          if @board.on_board? && @board.get_tile(check_row, check_col).nil?
+            empty_slot_count += 1
+          end
+        end
+      end
+    end
   end
 end
