@@ -123,4 +123,8 @@ class Reversi
     end
     return nil    
   end
+
+  def get_tile(row, col)
+    @board.get_tile(row, col)
+  end
 end
