@@ -5,12 +5,6 @@ class Reversi
   
   attr_reader :current_player
   def initialize
-    if $DEBUG
-      puts 'initialize reversi.rb'
-    end
-#    if player_first == nil
-#      raise ArgumentError, "player_first is nil"
-#    end
     @player = Player.new(true)
     @current_player = @player.tile
     @board = Board.new(@player.tile, @player.get_opponent_tile)
@@ -32,9 +26,6 @@ class Reversi
   end
 
   def next_player
-    if @DEBUG
-      puts "player.tile = " + @player.tile
-    end
     if move_possible_for_player?(@player)
       @player.change_player
     end
