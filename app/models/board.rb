@@ -92,7 +92,7 @@ class Board
   def count_tiles_for_player(player)
     count = 0
     @tile_positions.each do |tile|
-      if tile[:tile] == tile
+      if tile[:tile] == player
         count += 1
       end    
     end

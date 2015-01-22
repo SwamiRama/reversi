@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :tile
+  attr_reader :tile
   def initialize(is_first)
     if is_first
       @tile = 'X'

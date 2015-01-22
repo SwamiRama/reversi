@@ -18,7 +18,6 @@ class Reversi
     elsif is_move_allowed?(@player, @board, row, col)
       set_tile(row, col)
       next_player
-      @current_player = @player.tile
       return true
     else
       return false
@@ -26,9 +25,7 @@ class Reversi
   end
 
   def next_player
-    if move_possible_for_player?(@player)
-      @player.change_player
-    end
+    move_possible_for_player?(@player.get_opponent_tile) ? @current_player = @player.change_player : @current_player
   end
 
   def draw
@@ -36,7 +33,7 @@ class Reversi
   end
 
   def game_over?
-    return false
+    @board.count_all_tiles == Board::SIZE * Board::SIZE ? true : false
   end
 
   def set_tile(row, col)
@@ -102,7 +99,7 @@ class Reversi
     while board.on_board?(check_row, check_col)
       #puts "start get_adjacent_stones loop on row = " + check_row.to_s + " and col = " + check_col.to_s
       slot = board.get_tile(check_row, check_col)
-      if player.tile == slot
+      if @player.tile == slot
         return fields
       elsif slot.nil?
         return nil
