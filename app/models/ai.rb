@@ -18,15 +18,17 @@ class Ai
     @level = level
     @board = board
     @reversi = reversi
+    require 'pry'; binding.pry
+    return get_best_next_move
   end
 
   private
   def get_best_next_move_score(lvl)
     best_move = nil
     bestScore = 0.0
-    0.upto(@board.SIZE) do row
-      0.upto(@board.SIZE) do col
-        if @reversi.is_move_allowed(row, col)
+    0.upto(Board::SIZE) do |row|
+      0.upto(Board::SIZE) do |col|
+        if @reversi.is_move_allowed?(@player_ai, @board, row, col)
           checking_board = @reversi.clone
           checking_board.set_slot(row, col)
 

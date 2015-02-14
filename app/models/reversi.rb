@@ -1,5 +1,6 @@
 require_relative 'board'
 require_relative 'player'
+require_relative 'ai'
 
 class Reversi
   
@@ -22,6 +23,12 @@ class Reversi
     else
       return false
     end
+  end
+
+  def ai_move
+    ai = Ai.new(@player.get_opponent_tile)
+    ai.move(@level, @board, self)
+    move(ai[:row],ai[:col])
   end
 
   def next_player
