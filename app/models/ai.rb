@@ -14,9 +14,9 @@ class Ai
     @player_ai = tile
   end
 
-  def move(level, board, reversi)
+  def move(level, reversi)
     @level = level
-    @board = board
+    @board = reversi.board
     @reversi = reversi
     require 'pry'; binding.pry
     return get_best_next_move
@@ -30,9 +30,10 @@ class Ai
       0.upto(Board::SIZE) do |col|
         if @reversi.is_move_allowed?(@player_ai, @board, row, col)
           checking_board = @reversi.clone
-          checking_board.set_slot(row, col)
+          checking_board.set_tile(row, col)
+          @board = checking_board.board
 
-          check_score = checking_board.get_score_total
+          check_score = score_total
 
           if lvl > 0 && !checking_board.gameOver
             check_score += checking_board.get_best_next_move_score(lvl - 1)
@@ -75,9 +76,9 @@ class Ai
     return score_importance(@player_ai) - 1.5 * score_importance(@player_human)
   end
 
-  def score_importance(player)
+  def score_importance(player = nil)
     importance = 0
-    @tile_position.each do |tile|
+    @board.tile_positions.each do |tile|
       if tile[:tile] == player
         importance += BOARD_IMPORTANCE[tile[:row]][tile[:col]]
       end
@@ -91,7 +92,7 @@ class Ai
     return (64.0 / count_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
   end
 
-  def score_mobility(player)
+  def score_mobility(player = nil)
     mobility_count = 0
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
@@ -108,9 +109,9 @@ class Ai
     return (64.0 / (2 * count_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
   end
 
-  def score_potential(player)
+  def score_potential(player = nil)
     potential_count = 0
-    opponent = player.get_opponent_tile
+    opponent = @player.get_opponent_tile
     @tile_position.each do |tile|
       if tile == opponent
         potential_count += count_surrounding_empty_slot(row, col)

@@ -4,7 +4,7 @@ require_relative 'ai'
 
 class Reversi
   
-  attr_reader :current_player
+  attr_reader :current_player, :board
   def initialize
     @player = Player.new(true)
     @current_player = @player.tile
@@ -27,7 +27,7 @@ class Reversi
 
   def ai_move
     ai = Ai.new(@player.get_opponent_tile)
-    ai.move(@level, @board, self)
+    ai.move(@level, self)
     move(ai[:row],ai[:col])
   end
 
