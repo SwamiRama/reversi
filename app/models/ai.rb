@@ -1,3 +1,4 @@
+require 'deep_clone'
 class Ai
   @BOARD_IMPORTANCE = [
     [9999, 5, 500, 200, 200, 500, 5, 9999],
@@ -29,7 +30,7 @@ class Ai
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
         if @reversi.is_move_allowed?(@player_ai, @board, row, col)
-          checking_board = @reversi.clone
+          checking_board = DeepClone.clone(@reversi)
           checking_board.set_tile(row, col)
           @board = checking_board.board
 

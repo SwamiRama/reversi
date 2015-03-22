@@ -46,7 +46,7 @@ class Board
 
 
   def on_board?(row, col)
-    if row < SIZE && col < SIZE && row >= 0 && col >= 0
+    if row.between?(0, SIZE) && col.between?(0, SIZE)
       return true
     else
       return false
