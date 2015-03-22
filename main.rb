@@ -27,8 +27,9 @@ pp 'Welcome to Reversi'
 @reversi = Reversi.new
 while(!@reversi.game_over? && !@quit)
   pp 'current Player = ' + @reversi.current_player
-  pp 'm move'
-  pp 'd draw'
+  pp 'm or move'
+  pp 'd or draw'
+  pp 'h or help'
   input = gets.delete("\n")
   input_handler(input)
 end
