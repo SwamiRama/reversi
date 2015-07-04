@@ -1,34 +1,37 @@
-require 'minitest/autorun'
 require_relative '../app/models/player'
 
-class TestPlayer < Minitest::Test
-  def setup
+describe Player do
+
+  before :each do
     @player = Player.new(true)
   end
 
-  def test_initialize
-    assert_equal 'X', @player.tile
+  it "test_initialize" do
+    expect(@player.tile).to eq 'X'
     @player = Player.new(false)
-    assert_equal 'O', @player.tile
+    expect(@player.tile).to eq 'O'
   end
 
-  def test_get_opponent_tile
-    assert_equal 'O', @player.get_opponent_tile
+  it "test_get_opponent_tile" do
+    expect(@player.get_opponent_tile).to eq 'O'
+    @player = Player.new(false)
+    expect(@player.get_opponent_tile).to eq 'X'
   end
 
-  def test_change_player
-    assert_equal 'O', @player.change_player
-    assert_equal 'O', @player.tile
+  it "test_change_player" do
+    expect(@player.tile).to eq 'X'
+    expect(@player.change_player).to eq 'O'
+    expect(@player.tile).to eq 'O'
   end
 
-  def test_all
-    assert_equal 'X', @player.tile
-    assert_equal 'O', @player.get_opponent_tile
-    assert_equal 'X', @player.tile
-    assert_equal 'O', @player.change_player
-    assert_equal 'O', @player.tile
-    assert_equal 'X', @player.get_opponent_tile
-    assert_equal 'O', @player.tile
-    assert_equal 'X', @player.change_player
+  it "test_all" do
+    expect(@player.tile).to eq 'X'
+    expect(@player.get_opponent_tile).to eq 'O'
+    expect(@player.tile).to eq 'X'
+    expect(@player.change_player).to eq 'O'
+    expect(@player.tile).to eq 'O'
+    expect(@player.get_opponent_tile).to eq 'X'
+    expect(@player.tile).to eq 'O'
+    expect(@player.change_player).to eq 'X'
   end
 end

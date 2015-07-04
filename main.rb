@@ -1,6 +1,4 @@
-require 'green_shoes'
 require_relative 'app/models/reversi'
-require_relative 'app/views/board_view'
 require 'pry'
 
 

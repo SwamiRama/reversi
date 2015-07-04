@@ -1,5 +1,6 @@
 require 'deep_clone'
 class Ai
+  attr_reader :board
   @BOARD_IMPORTANCE = [
     [9999, 5, 500, 200, 200, 500, 5, 9999],
     [5, 1, 50, 150, 150, 50, 1, 5],
@@ -8,7 +9,7 @@ class Ai
     [200, 150, 100, 50, 50, 100, 150, 200],
     [500, 50, 250, 100, 100, 250, 50, 500],
     [5, 1, 50, 150, 150, 50, 1, 5],
-    [9999, 5, 500, 200, 200, 500, 5, 9999] 
+    [9999, 5, 500, 200, 200, 500, 5, 9999]
   ]
 
   def initialize(tile)
@@ -19,7 +20,6 @@ class Ai
     @level = level
     @board = reversi.board
     @reversi = reversi
-    require 'pry'; binding.pry
     return get_best_next_move
   end
 
@@ -36,8 +36,8 @@ class Ai
 
           check_score = score_total
 
-          if lvl > 0 && !checking_board.gameOver
-            check_score += checking_board.get_best_next_move_score(lvl - 1)
+          if lvl > 0 && !checking_board.game_over?
+            check_score += get_best_next_move_score(lvl - 1)
           end
 
           if bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
@@ -88,12 +88,12 @@ class Ai
   end
 
   def score_mobility
-    mobility_human = score_mobility(@player_human)
-    mobility_machine = score_mobility(@player_ai)
-    return (64.0 / count_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
+    mobility_human = score_mobility_for_player(@player_human)
+    mobility_machine = score_mobility_for_player(@player_ai)
+    return (64.0 / @board.count_all_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
   end
 
-  def score_mobility(player = nil)
+  def score_mobility_for_player(player)
     mobility_count = 0
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
@@ -105,19 +105,20 @@ class Ai
   end
 
   def score_potential
-    potential_human = score_potential(@player_human)
-    potential_machine = score_potential(@player_ai)
-    return (64.0 / (2 * count_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
+    potential_human = score_potential_for_player(@player_human)
+    potential_machine = score_potential_for_player(@player_ai)
+    return (64.0 / (2 * @board.count_all_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
   end
 
-  def score_potential(player = nil)
+  def score_potential_for_player(player)
     potential_count = 0
-    opponent = @player.get_opponent_tile
-    @tile_position.each do |tile|
+    opponent = Player.get_opponent_tile_for player
+    @board.tile_positions.each do |tile|
       if tile == opponent
         potential_count += count_surrounding_empty_slot(row, col)
       end
     end
+    return potential_count
   end
 
   def count_surrounding_empty_slot(row, col)

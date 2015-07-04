@@ -4,7 +4,7 @@ class Board
   SIZE = 8
   attr_reader :tile_positions
   def initialize(stone_player_one, stone_player_two)
-    @tile_positions = [] 
+    @tile_positions = []
     @tile_positions << {:tile => stone_player_one, :row => SIZE / 2, :col => SIZE / 2}
     @tile_positions << {:tile => stone_player_one, :row => SIZE / 2 - 1, :col => SIZE / 2 - 1}
     @tile_positions << {:tile => stone_player_two, :row => SIZE / 2, :col => SIZE / 2 - 1}
@@ -16,16 +16,14 @@ class Board
 
   def set_tile_allowed?(row, col)
     if on_board?(row, col)
-      @tile_positions.each do |tile|
-        if tile[:row] == row && tile[:col] == col
-          puts "move not allowed, there is already a tile!"
-          return false
-        end
+      if get_tile(row, col).nil?
+        return true
+      else
+        return false
       end
     else
       return false
     end
-    return true
   end
 
   def change_tile(row, col, current_player)
@@ -33,9 +31,11 @@ class Board
       @tile_positions.each do |tile|
         if tile[:row] == row && tile[:col] == col
           tile[:tile] = current_player
+          return true
         end
       end
     end
+    return false
   end
 
   def set_tile(row, col, current_player)
@@ -44,13 +44,21 @@ class Board
     end
   end
 
-
   def on_board?(row, col)
     if row.between?(0, SIZE) && col.between?(0, SIZE)
       return true
     else
       return false
     end
+  end
+
+  def get_tile_positions_entry(row, col)
+    @tile_positions.each do |tile|
+      if tile[:row] == row && tile[:col] == col
+        return tile
+      end
+    end
+    return nil
   end
 
   def get_tile(row, col)
@@ -94,7 +102,7 @@ class Board
     @tile_positions.each do |tile|
       if tile[:tile] == player
         count += 1
-      end    
+      end
     end
     return count
   end

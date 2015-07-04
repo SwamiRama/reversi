@@ -6,17 +6,17 @@ class Player
     else
       @tile = 'O'
     end
-  end  
+  end
 
   def get_opponent_tile
-    self.tile == 'O' ? 'X' : 'O'
+    @tile == 'O' ? 'X' : 'O'
+  end
+
+  def self.get_opponent_tile_for(player)
+    player == 'O' ? 'X' : 'O'
   end
 
   def change_player
-    if self.tile == 'O'
-      @tile = 'X'
-    else
-      @tile = 'O'
-    end
+    @tile == 'O' ? @tile = 'X' : @tile = 'O'
   end
 end

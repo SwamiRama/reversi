@@ -3,7 +3,6 @@ require_relative 'player'
 require_relative 'ai'
 
 class Reversi
-  
   attr_reader :current_player, :board
   def initialize
     @player = Player.new(true)
@@ -28,7 +27,7 @@ class Reversi
   def ai_move
     ai = Ai.new(@player.get_opponent_tile)
     ai.move(@level, self)
-    move(ai[:row],ai[:col])
+    move(ai.board.tile_positions.last[:row],ai.board.tile_positions.last[:col])
   end
 
   def next_player
@@ -51,8 +50,7 @@ class Reversi
           adjacent_stones = []
           adjacent_stones = get_adjacent_stones(@player, @board, row, col, row_direction, col_direction)
           if !adjacent_stones.nil?
-            while !adjacent_stones.empty?            
-              puts "start set_tile loop"
+            while !adjacent_stones.empty?
               position = adjacent_stones.pop
               @board.change_tile(position[:row], position[:col], @player.tile)
             end
@@ -69,7 +67,7 @@ class Reversi
         -1.upto(1) do |col_direction|
           if row_direction != 0 || col_direction != 0
             adjacent_stones = get_adjacent_stones(player, board, row, col, row_direction, col_direction)
-            if !adjacent_stones.nil? 
+            if !adjacent_stones.nil?
              if !adjacent_stones.empty?
                return good_move = true
              end
@@ -116,7 +114,7 @@ class Reversi
       check_row = check_row + row_direction
       check_col = check_col + col_direction
     end
-    return nil    
+    return nil
   end
 
   def get_tile(row, col)
