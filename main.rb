@@ -6,8 +6,11 @@ require 'pry'
 def input_handler(input)
   case input
   when 'move', 'm'
-    move = gets
-    if @reversi.move(move[0].to_i, move[2].to_i)
+    puts 'row:'
+    row = gets
+    puts 'col'
+    col = gets
+    if @reversi.move(row.to_i, col.to_i)
       @reversi.ai_move
     end
   when 'help', 'h'
@@ -18,7 +21,7 @@ def input_handler(input)
     @quit = true
   else
     puts 'ERROR: Wrong input'
-  end  
+  end
 end
 
 pp 'Welcome to Reversi'

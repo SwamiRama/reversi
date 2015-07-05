@@ -1,28 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    atk (2.2.3)
-      glib2 (= 2.2.3)
-    cairo (1.14.0)
-      pkg-config (>= 1.1.5)
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    gdk_pixbuf2 (2.2.3)
-      glib2 (= 2.2.3)
-    glib2 (2.2.3)
-      pkg-config
-    green_shoes (1.1.374)
-      gtk2
-    gtk2 (2.2.3)
-      atk (= 2.2.3)
-      gdk_pixbuf2 (= 2.2.3)
-      pango (= 2.2.3)
     interface (1.0.3)
     method_source (0.8.2)
-    pango (2.2.3)
-      cairo (>= 1.12.5)
-      glib2 (= 2.2.3)
-    pkg-config (1.1.6)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -48,7 +30,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  green_shoes
   interface (~> 1.0.3)
   pry
   require_all

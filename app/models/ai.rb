@@ -1,7 +1,7 @@
 require 'deep_clone'
 class Ai
   attr_reader :board
-  @BOARD_IMPORTANCE = [
+  BOARD_IMPORTANCE = [
     [9999, 5, 500, 200, 200, 500, 5, 9999],
     [5, 1, 50, 150, 150, 50, 1, 5],
     [500, 50, 250, 100, 100, 250, 50, 500],
@@ -24,7 +24,7 @@ class Ai
   end
 
   private
-  def get_best_next_move_score(lvl)
+  def get_best_next_move_score_with_lvl(lvl)
     best_move = nil
     bestScore = 0.0
     0.upto(Board::SIZE) do |row|
@@ -37,7 +37,7 @@ class Ai
           check_score = score_total
 
           if lvl > 0 && !checking_board.game_over?
-            check_score += get_best_next_move_score(lvl - 1)
+            check_score += get_best_next_move_score_with_lvl(lvl - 1)
           end
 
           if bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
@@ -57,7 +57,7 @@ class Ai
   end
 
   def get_best_next_move
-    get_best_next_move_score(@level - 1)
+    get_best_next_move_score_with_lvl(@level - 1)
     return @best_next_move
   end
 
@@ -74,10 +74,10 @@ class Ai
   end
 
   def score_importance
-    return score_importance(@player_ai) - 1.5 * score_importance(@player_human)
+    return score_importance_for_player(@player_ai) - 1.5 * score_importance_for_player(@player_human)
   end
 
-  def score_importance(player = nil)
+  def score_importance_for_player(player)
     importance = 0
     @board.tile_positions.each do |tile|
       if tile[:tile] == player
@@ -115,13 +115,13 @@ class Ai
     opponent = Player.get_opponent_tile_for player
     @board.tile_positions.each do |tile|
       if tile == opponent
-        potential_count += count_surrounding_empty_slot(row, col)
+        potential_count += count_surrounding_empty_slots(row, col)
       end
     end
     return potential_count
   end
 
-  def count_surrounding_empty_slot(row, col)
+  def count_surrounding_empty_slots(row, col)
     empty_slot_count = 0
     -1.upto(1) do |row_direction|
       -1.upto(1) do |col_direction|
@@ -134,5 +134,7 @@ class Ai
         end
       end
     end
+    return empty_slot_count
   end
+
 end

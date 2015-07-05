@@ -31,7 +31,7 @@ class Reversi
   end
 
   def next_player
-    move_possible_for_player?(@player.get_opponent_tile) ? @current_player = @player.change_player : @current_player
+    possible_move_for_player?(@player.get_opponent_tile) ? @current_player = @player.change_player : @current_player
   end
 
   def draw
@@ -60,8 +60,7 @@ class Reversi
     end
   end
 
-  def is_move_allowed?(player, board, row, col)
-    good_move = false
+  def is_move_allowed?(player, board, row, col)    
     if board.set_tile_allowed?(row, col)
       -1.upto(1) do |row_direction|
         -1.upto(1) do |col_direction|
@@ -69,19 +68,19 @@ class Reversi
             adjacent_stones = get_adjacent_stones(player, board, row, col, row_direction, col_direction)
             if !adjacent_stones.nil?
              if !adjacent_stones.empty?
-               return good_move = true
+               return true
              end
             end
           end
         end
       end
-      good_move
+      return false
     else
       return false
     end
   end
 
-  def move_possible_for_player?(player)
+  def possible_move_for_player?(player)
     test_board = @board.clone
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
