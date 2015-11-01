@@ -1,4 +1,5 @@
 require_relative '../app/models/board'
+require_relative '../app/models/player'
 
 describe Board do
   before :each do
@@ -13,7 +14,7 @@ describe Board do
     expect(@board.set_tile_allowed?(9999, -2)).to be false
   end
 
-  it 'should be false set_tile_allowed out of board' do
+  it 'should be true set_tile_allowed on of board' do
     expect(@board.set_tile_allowed?(0, 0)).to be true
     expect(@board.set_tile_allowed?(5, 5)).to be true
     expect(@board.set_tile_allowed?(7, 7)).to be true

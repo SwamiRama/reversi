@@ -25,6 +25,11 @@ class Ai
 
   private
 
+  def get_best_next_move
+    get_best_next_move_score_with_lvl(@level - 1)
+    @best_next_move
+  end
+
   def get_best_next_move_score_with_lvl(lvl)
     best_move = nil
     bestScore = 0.0
@@ -41,7 +46,7 @@ class Ai
             check_score += get_best_next_move_score_with_lvl(lvl - 1)
           end
 
-          if bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
+          if bestScore.nil? || is_new_extremum_depending_on_player_turn?(bestScore, check_score)
             bestScore = check_score
             best_move << { row: row, col: col }
           end
@@ -55,12 +60,7 @@ class Ai
     bestScore
   end
 
-  def get_best_next_move
-    get_best_next_move_score_with_lvl(@level - 1)
-    @best_next_move
-  end
-
-  def is_new_extremum_depending_on_player_turn(reference_value, score)
+  def is_new_extremum_depending_on_player_turn?(reference_value, score)
     if @next_turn == @next_opponent
       return reference_value > score
     else
