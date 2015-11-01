@@ -5,13 +5,11 @@ class Board
   attr_reader :tile_positions
   def initialize(stone_player_one, stone_player_two)
     @tile_positions = []
-    @tile_positions << {:tile => stone_player_one, :row => SIZE / 2, :col => SIZE / 2}
-    @tile_positions << {:tile => stone_player_one, :row => SIZE / 2 - 1, :col => SIZE / 2 - 1}
-    @tile_positions << {:tile => stone_player_two, :row => SIZE / 2, :col => SIZE / 2 - 1}
-    @tile_positions << {:tile => stone_player_two, :row => SIZE / 2 - 1, :col => SIZE / 2}
-    if $DEBUG
-      puts @tile_positions
-    end
+    @tile_positions << { tile: stone_player_one, row: SIZE / 2, col: SIZE / 2 }
+    @tile_positions << { tile: stone_player_one, row: SIZE / 2 - 1, col: SIZE / 2 - 1 }
+    @tile_positions << { tile: stone_player_two, row: SIZE / 2, col: SIZE / 2 - 1 }
+    @tile_positions << { tile: stone_player_two, row: SIZE / 2 - 1, col: SIZE / 2 }
+    puts @tile_positions if $DEBUG
   end
 
   def set_tile_allowed?(row, col)
@@ -35,12 +33,12 @@ class Board
         end
       end
     end
-    return false
+    false
   end
 
   def set_tile(row, col, current_player)
     if set_tile_allowed?(row, col)
-      @tile_positions << {:tile => current_player, :row => row, :col => col}
+      @tile_positions << { tile: current_player, row: row, col: col }
     end
   end
 
@@ -54,22 +52,17 @@ class Board
 
   def get_tile_positions_entry(row, col)
     @tile_positions.each do |tile|
-      if tile[:row] == row && tile[:col] == col
-        return tile
-      end
+      return tile if tile[:row] == row && tile[:col] == col
     end
-    return nil
+    nil
   end
 
   def get_tile(row, col)
     @tile_positions.each do |tile|
-      if tile[:row] == row && tile[:col] == col
-        return tile[:tile]
-      end
+      return tile[:tile] if tile[:row] == row && tile[:col] == col
     end
-    return nil
+    nil
   end
-
 
   def draw
     puts ' |0|1|2|3|4|5|6|7|'
@@ -80,18 +73,16 @@ class Board
           puts 'col = ' + col.to_s + ', row = ' + row.to_s
           puts @tile_positions
         end
-        stone = ""
+        stone = ''
         @tile_positions.each do |tile|
           if tile[:row] == row && tile[:col] == col
             stone = tile[:tile]
             break
           else
-            stone = "?"
+            stone = '?'
           end
         end
-        if !stone.nil?
-          board << stone + "|"
-        end
+        board << stone + '|' unless stone.nil?
       end
       puts board
     end
@@ -100,14 +91,12 @@ class Board
   def count_tiles_for_player(player)
     count = 0
     @tile_positions.each do |tile|
-      if tile[:tile] == player
-        count += 1
-      end
+      count += 1 if tile[:tile] == player
     end
-    return count
+    count
   end
 
   def count_all_tiles
-    return @tile_positions.count
+    @tile_positions.count
   end
 end

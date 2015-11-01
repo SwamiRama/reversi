@@ -10,8 +10,8 @@ describe Reversi do
   end
 
   it 'should move' do
-    expect(@reversi.move(0,0)).to be false
-    expect(@reversi.move(4,2)).to be true
+    expect(@reversi.move(0, 0)).to be false
+    expect(@reversi.move(4, 2)).to be true
   end
 
   it 'should draw' do

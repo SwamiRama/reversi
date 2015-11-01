@@ -20,10 +20,11 @@ class Ai
     @level = level
     @board = reversi.board
     @reversi = reversi
-    return get_best_next_move
+    get_best_next_move
   end
 
   private
+
   def get_best_next_move_score_with_lvl(lvl)
     best_move = nil
     bestScore = 0.0
@@ -42,7 +43,7 @@ class Ai
 
           if bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
             bestScore = check_score
-            best_move << {:row => row, :col => col}
+            best_move << { row: row, col: col }
           end
         end
       end
@@ -50,31 +51,29 @@ class Ai
 
     @best_next_move = best_move
 
-    if bestScore.nil?
-      raise "move error"
-    end
-    return bestScore
+    fail 'move error' if bestScore.nil?
+    bestScore
   end
 
   def get_best_next_move
     get_best_next_move_score_with_lvl(@level - 1)
-    return @best_next_move
+    @best_next_move
   end
 
   def is_new_extremum_depending_on_player_turn(reference_value, score)
     if @next_turn == @next_opponent
-      return reference_value > score;
+      return reference_value > score
     else
-      return reference_value < score;
+      return reference_value < score
     end
   end
 
   def score_total
-    return score_importance + score_mobility + score_potential
+    score_importance + score_mobility + score_potential
   end
 
   def score_importance
-    return score_importance_for_player(@player_ai) - 1.5 * score_importance_for_player(@player_human)
+    score_importance_for_player(@player_ai) - 1.5 * score_importance_for_player(@player_human)
   end
 
   def score_importance_for_player(player)
@@ -84,13 +83,13 @@ class Ai
         importance += BOARD_IMPORTANCE[tile[:row]][tile[:col]]
       end
     end
-    return importance
+    importance
   end
 
   def score_mobility
     mobility_human = score_mobility_for_player(@player_human)
     mobility_machine = score_mobility_for_player(@player_ai)
-    return (64.0 / @board.count_all_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
+    (64.0 / @board.count_all_tiles) * (3.0 * mobility_machine - 4.0 * mobility_human)
   end
 
   def score_mobility_for_player(player)
@@ -107,7 +106,7 @@ class Ai
   def score_potential
     potential_human = score_potential_for_player(@player_human)
     potential_machine = score_potential_for_player(@player_ai)
-    return (64.0 / (2 * @board.count_all_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
+    (64.0 / (2 * @board.count_all_tiles)) * (2.5 * potential_machine - 3.0 * potential_human)
   end
 
   def score_potential_for_player(player)
@@ -118,7 +117,7 @@ class Ai
         potential_count += count_surrounding_empty_slots(row, col)
       end
     end
-    return potential_count
+    potential_count
   end
 
   def count_surrounding_empty_slots(row, col)
@@ -134,7 +133,6 @@ class Ai
         end
       end
     end
-    return empty_slot_count
+    empty_slot_count
   end
-
 end
