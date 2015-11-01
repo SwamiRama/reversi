@@ -95,15 +95,13 @@ class Reversi
 
     fields = []
     while board.on_board?(check_row, check_col)
-      # puts "start get_adjacent_stones loop on row = " + check_row.to_s + " and col = " + check_col.to_s
-      slot = board.get_tile(check_row, check_col)
-      if @player.tile == slot
-        return fields
-      elsif slot.nil?
-        return nil
-      else
-        fields << { row: check_row, col: check_col }
+
+      case board.get_tile(check_row, check_col)
+      when @player.tile then return fields
+      when nil then return nil
+      else fields << { row: check_row, col: check_col }
       end
+
       check_row += row_direction
       check_col += col_direction
     end
