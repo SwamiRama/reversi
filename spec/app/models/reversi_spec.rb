@@ -1,6 +1,6 @@
-require_relative '../app/models/reversi'
+require "spec_helper"
 
-describe Reversi do
+describe 'Reversi' do
   before :each do
     @reversi = Reversi.new
   end
@@ -19,5 +19,15 @@ describe Reversi do
 
   it 'should set next_player' do
     expect(@reversi.next_player).to eq 'O'
+  end
+  it 'play ai' do
+    @reversi.ai_move
+    @reversi.draw
+    @reversi.ai_move
+    @reversi.draw
+    @reversi.ai_move
+    @reversi.draw
+    @reversi.ai_move
+    @reversi.draw
   end
 end
