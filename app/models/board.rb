@@ -9,8 +9,8 @@ class Board
     @board[SIZE / 2 - 1][SIZE / 2] = args.fetch(:player_two)
   end
 
-  def set_tile(row, col, _current_player)
-    @board[row][col] = current_user if set_tile_allowed?(row, col)
+  def set_tile(row, col, current_player)
+    @board[row][col] = current_player if set_tile_allowed?(row, col)
   end
 
   def set_tile_allowed?(row, col)
@@ -28,13 +28,11 @@ class Board
   end
 
   def on_board?(row, col)
-    row.between?(0, SIZE) && col.between?(0, SIZE)
+    row.between?(0, SIZE - 1) && col.between?(0, SIZE - 1)
   end
 
-  def get_tile_positions_entry(row, col)
-    @board.each do |tile|
-      return tile if tile[:row] == row && tile[:col] == col
-    end
+  def get_tile(row, col)
+    @board[row][col]
   end
 
   def count_tiles_for_player(player)
@@ -43,6 +41,18 @@ class Board
 
   def count_all_tiles
     SIZE * SIZE - @board.map { |row| row.count(nil) }.inject(:+)
+  end
+
+  def tile_positions(player)
+    a = []
+    @board.each_with_index do |row, row_index|
+      row.each_with_index do |col, col_index|
+        if col == player
+          a << {row: row_index, col: col_index}
+        end
+      end
+    end
+    a
   end
 
   def draw

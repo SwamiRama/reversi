@@ -1,5 +1,6 @@
 require 'deep_clone'
 class Ai
+  class << self
   attr_reader :board
   BOARD_IMPORTANCE = [
     [9999, 5, 500, 200, 200, 500, 5, 9999],
@@ -12,49 +13,37 @@ class Ai
     [9999, 5, 500, 200, 200, 500, 5, 9999]
   ]
 
-  def initialize(tile)
-    @player_ai = tile
-  end
-
-  def move(level, reversi)
-    @level = level
-    @board = reversi.board
+  def best_next_move(reversi, level)
     @reversi = reversi
-    get_best_next_move
+    @player_ai = reversi.current_player
+    get_best_next_move_score(level - 1, reversi)
+    @best_next_move[0]
   end
 
-  private
+    private
 
-  def get_best_next_move
-    get_best_next_move_score_with_lvl(@level - 1, @board)
-    @best_next_move
-  end
-
-  def get_best_next_move_score_with_lvl(lvl, board)
-    best_move = nil
+  def get_best_next_move_score(lvl, reversi)
+    best_move = []
     bestScore = 0.0
-    best_board = board
     0.upto(Board::SIZE) do |row|
       0.upto(Board::SIZE) do |col|
-        next unless @reversi.is_move_allowed?(@player_ai, board, row, col)
+        next unless @reversi.is_move_allowed?(@player_ai, reversi.board, row, col)
         checking_board = DeepClone.clone(@reversi)
         checking_board.set_tile(row, col)
-        # @board = checking_board.board
+        @board = checking_board.board
 
         check_score = score_total
 
         if lvl > 0 && !checking_board.game_over?
-          check_score += get_best_next_move_score_with_lvl(lvl - 1, checking_board.board)
+          check_score += get_best_next_move_score(lvl - 1, checking_board)
         end
 
-        next unless bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
-        bestScore = check_score
-        best_move << { row: row, col: col }
-        best_board = checking_board.board
+        if bestScore.nil? || is_new_extremum_depending_on_player_turn(bestScore, check_score)
+          bestScore = check_score
+          best_move << { row: row, col: col }
+        end
       end
     end
-
-    @board = best_board if (@level - 1).eql? lvl
 
     @best_next_move = best_move
 
@@ -80,10 +69,8 @@ class Ai
 
   def score_importance_for_player(player)
     importance = 0
-    @board.tile_positions.each do |tile|
-      if tile[:tile] == player
-        importance += BOARD_IMPORTANCE[tile[:row]][tile[:col]]
-      end
+    @board.tile_positions(player).each do |position|
+      importance += BOARD_IMPORTANCE[position[:row]][position[:col]]
     end
     importance
   end
@@ -114,7 +101,7 @@ class Ai
   def score_potential_for_player(player)
     potential_count = 0
     opponent = Player.get_opponent_tile_for player
-    @board.tile_positions.each do |tile|
+    @board.tile_positions(player).each do |tile|
       if tile == opponent
         potential_count += count_surrounding_empty_slots(row, col)
       end
@@ -136,4 +123,5 @@ class Ai
     end
     empty_slot_count
   end
+end
 end
