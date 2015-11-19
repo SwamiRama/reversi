@@ -30,33 +30,24 @@ class Reversi
   end
 
   def is_move_allowed?(player, board, row, col)
-    if board.set_tile_allowed?(row, col)
-      -1.upto(1) do |row_direction|
-        -1.upto(1) do |col_direction|
-          if row_direction != 0 || col_direction != 0
-            adjacent_stones = adjacent_stones(player, row, col, row_direction, col_direction)
-            return true unless adjacent_stones.nil? || adjacent_stones.empty?
-          end
-        end
-      end
-      return false
-    else
-      return false
+    return false unless board.set_tile_allowed?(row, col)
+    direction_loop do |row_direction, col_direction|
+      adjacent_stones = adjacent_stones(player, row, col, row_direction, col_direction)
+      return true unless adjacent_stones.nil? || adjacent_stones.empty?
     end
+    false
   end
 
   def adjacent_stones(player, row, col, row_direction, col_direction)
-    fail 'there is no direction' if row_direction == 0 && col_direction == 0
-
     check_row = row + row_direction
     check_col = col + col_direction
-
     fields = []
     while board.on_board?(check_row, check_col)
       slot = board.get_tile(check_row, check_col)
-      if player == slot
+      case slot
+      when player
         return fields
-      elsif slot.nil?
+      when nil
         return nil
       else
         fields << { row: check_row, col: check_col }
@@ -77,15 +68,12 @@ class Reversi
   end
 
   def switch_opponent_tiles(row, col)
-    -1.upto(1) do |row_direction|
-      -1.upto(1) do |col_direction|
-        next unless row_direction != 0 || col_direction != 0
-        adjacent_stones = adjacent_stones(@player.tile, row, col, row_direction, col_direction)
-        next if adjacent_stones.nil?
-        until adjacent_stones.empty?
-          position = adjacent_stones.pop
-          @board.change_tile(position[:row], position[:col], @player.tile)
-        end
+    direction_loop do |row_direction, col_direction|
+      adjacent_stones = adjacent_stones(@player.tile, row, col, row_direction, col_direction)
+      next if adjacent_stones.nil?
+      until adjacent_stones.empty?
+        position = adjacent_stones.pop
+        @board.change_tile(position[:row], position[:col], @player.tile)
       end
     end
   end
@@ -97,6 +85,15 @@ class Reversi
         if test_board.set_tile_allowed?(row, col)
           is_move_allowed?(player, test_board, row, col)
         end
+      end
+    end
+  end
+
+  def direction_loop
+    -1.upto(1) do |row_direction|
+      -1.upto(1) do |col_direction|
+        next unless row_direction != 0 || col_direction != 0
+        yield row_direction, col_direction
       end
     end
   end
