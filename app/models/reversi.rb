@@ -1,8 +1,10 @@
 require_relative 'board'
 require_relative 'player'
 require_relative 'ai'
+require_relative '../helper/game_helper'
 
 class Reversi
+  include GameHelper
   attr_reader :current_player, :board
   def initialize
     @player = Player.new(true)
@@ -25,13 +27,13 @@ class Reversi
   end
 
   def ai_move
-    move_position = Ai.best_next_move(self, 1)
+    move_position = Ai.best_next_move(self, 2)
     move(move_position[:row], move_position[:col])
   end
 
   def is_move_allowed?(player, board, row, col)
     return false unless board.set_tile_allowed?(row, col)
-    direction_loop do |row_direction, col_direction|
+    GameHelper.direction_loop do |row_direction, col_direction|
       adjacent_stones = adjacent_stones(player, row, col, row_direction, col_direction)
       return true unless adjacent_stones.nil? || adjacent_stones.empty?
     end
@@ -68,7 +70,7 @@ class Reversi
   end
 
   def switch_opponent_tiles(row, col)
-    direction_loop do |row_direction, col_direction|
+    GameHelper.direction_loop do |row_direction, col_direction|
       adjacent_stones = adjacent_stones(@player.tile, row, col, row_direction, col_direction)
       next if adjacent_stones.nil?
       until adjacent_stones.empty?
@@ -85,15 +87,6 @@ class Reversi
         if test_board.set_tile_allowed?(row, col)
           is_move_allowed?(player, test_board, row, col)
         end
-      end
-    end
-  end
-
-  def direction_loop
-    -1.upto(1) do |row_direction|
-      -1.upto(1) do |col_direction|
-        next unless row_direction != 0 || col_direction != 0
-        yield row_direction, col_direction
       end
     end
   end
