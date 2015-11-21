@@ -8,7 +8,7 @@ class Player
     end
   end
 
-  def get_opponent_tile
+  def opponent_tile
     @tile == 'O' ? 'X' : 'O'
   end
 

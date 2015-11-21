@@ -1,17 +1,16 @@
 require_relative 'board'
 require_relative 'player'
-require_relative 'ai'
+require_relative 'ai/ai'
 require_relative '../helper/game_helper'
 
 class Reversi
   include GameHelper
-  attr_reader :current_player, :board
+  attr_reader :player, :board
   def initialize
     @player = Player.new(true)
-    @current_player = @player.tile
-    @board = Board.new(player_one: @player.tile, player_two: @player.get_opponent_tile)
+    @board = Board.new(player_one: @player.tile, player_two: @player.opponent_tile)
     @gameOver = false
-    @level = 5
+    @level = 3
   end
 
   def move(row, col)
@@ -61,7 +60,7 @@ class Reversi
   end
 
   def next_player
-    possible_move_for_player?(@player.get_opponent_tile) ? @current_player = @player.change_player : @current_player
+    possible_move_for_player?(@player.opponent_tile) ? @player.change_player : @player.tile
   end
 
   def set_tile(row, col)
@@ -82,13 +81,10 @@ class Reversi
 
   def possible_move_for_player?(player)
     test_board = @board.clone
-    0.upto(Board::SIZE) do |row|
-      0.upto(Board::SIZE) do |col|
-        if test_board.set_tile_allowed?(row, col)
-          is_move_allowed?(player, test_board, row, col)
-        end
-      end
+    GameHelper.every_slot_on_boad do |row, col|
+      return true if is_move_allowed?(player, test_board, row, col)
     end
+    false
   end
 
   def draw
@@ -96,7 +92,15 @@ class Reversi
   end
 
   def game_over?
+    board_full? || !move_possibility?
+  end
+
+  def board_full?
     @board.count_all_tiles == Board::SIZE * Board::SIZE
+  end
+
+  def move_possibility?
+    possible_move_for_player?(@player.tile) || possible_move_for_player?(@player.opponent_tile)
   end
 
   def get_tile(row, col)
