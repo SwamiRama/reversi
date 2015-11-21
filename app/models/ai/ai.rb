@@ -48,7 +48,7 @@ class Ai
     end
 
     def is_new_extremum_depending_on_player_turn(reference_value, score, reversi_clone)
-      if reversi_clone.next_player == @player_opponent
+      if reversi_clone.possible_move_for_player?(@player_opponent)
         return reference_value > score
       else
         return reference_value < score
