@@ -7,10 +7,10 @@ class Reversi
   include GameHelper
   attr_reader :player, :board
   def initialize
-    @player = Player.new({ player_one: 'X', player_two: 'O' })
+    @player = Player.new(player_one: 'X', player_two: 'O')
     @board = Board.new(player_one: @player.one, player_two: @player.two)
     @gameOver = false
-    @level = 3
+    @level = 2
   end
 
   def move(row, col)
@@ -26,8 +26,10 @@ class Reversi
   end
 
   def ai_move
-    ai_move = Ai.best_next_move(self, @level)
-    move(ai_move[:row], ai_move[:col])
+    unless game_over?
+      ai_move = Ai.best_next_move(self, @level)
+      move(ai_move[:row], ai_move[:col])
+    end
   end
 
   def is_move_allowed?(player, board, row, col)

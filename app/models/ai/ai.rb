@@ -1,4 +1,3 @@
-require 'deep_clone'
 require_relative '../../helper/game_helper'
 require_relative 'mobility'
 require_relative 'potential'
@@ -24,11 +23,11 @@ class Ai
       bestScore = nil
       GameHelper.every_slot_on_boad do |row, col|
         if reversi.is_move_allowed?(reversi.player.current, reversi.board, row, col)
-          reversi_clone = DeepClone.clone(reversi)
+          reversi_clone = Marshal.load(Marshal.dump(reversi))
           reversi_clone.move(row, col)
           @board = reversi_clone.board
 
-          check_score = score_total
+          check_score = score_total(reversi_clone)
 
           if lvl > 0 && !reversi_clone.game_over?
             check_score += get_best_next_move_score(lvl - 1, reversi_clone)
@@ -55,8 +54,8 @@ class Ai
       end
     end
 
-    def score_total
-      Importance.score_importance(@player_ai, @player_opponent, @board) + Mobility.score_mobility(@player_ai, @player_opponent, @board, @reversi) + Potential.score_potential(@player_ai, @player_opponent, @board, @reversi)
+    def score_total(reversi_clone)
+      Importance.score_importance(@player_ai, @player_opponent, @board) + Mobility.score_mobility(@player_ai, @player_opponent, @board, reversi_clone) + Potential.score_potential(@player_ai, @player_opponent, @board, reversi_clone)
     end
   end
 end

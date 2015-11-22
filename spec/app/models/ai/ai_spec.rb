@@ -12,12 +12,14 @@ describe 'Ai' do
     describe 'second move' do
       it 'should move' do
         Benchmark.bm do |x|
-          10.times do |index|
+          60.times do |index|
             x.report("ai move #{index}:") do
               expect(reversi.ai_move).to eq true
             end
+            # reversi.draw
           end
         end
+        expect(reversi.ai_move).to eq nil
       end
     end
   end
