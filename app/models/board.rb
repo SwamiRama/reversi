@@ -18,9 +18,7 @@ class Board
   end
 
   def change_tile(row, col, current_player)
-    if change_tile_allowed?(row, col, current_player)
-      @board[row][col] = current_player
-    end
+    @board[row][col] = current_player if change_tile_allowed?(row, col, current_player)
   end
 
   def change_tile_allowed?(row, col, current_player)
@@ -47,9 +45,7 @@ class Board
     a = []
     @board.each_with_index do |row, row_index|
       row.each_with_index do |col, col_index|
-        if col == player
-          a << {row: row_index, col: col_index}
-        end
+        a << { row: row_index, col: col_index } if col == player
       end
     end
     a

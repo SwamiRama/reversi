@@ -26,8 +26,8 @@ class Reversi
   end
 
   def ai_move
-    move_position = Ai.best_next_move(self, 2)
-    move(move_position[:row], move_position[:col])
+    ai_move = Ai.best_next_move(self, @level)
+    move(ai_move[:row], ai_move[:col])
   end
 
   def is_move_allowed?(player, board, row, col)
@@ -80,9 +80,8 @@ class Reversi
   end
 
   def possible_move_for_player?(player)
-    test_board = @board.clone
     GameHelper.every_slot_on_boad do |row, col|
-      return true if is_move_allowed?(player, test_board, row, col)
+      return true if is_move_allowed?(player, @board, row, col)
     end
     false
   end

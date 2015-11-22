@@ -9,7 +9,7 @@ module Importance
     [5, 1, 50, 150, 150, 50, 1, 5],
     [9999, 5, 500, 200, 200, 500, 5, 9999]
   ]
-  
+
   def self.score_importance(player_ai, player_opponent, board)
     @board = board
     score_importance_for(player_ai) - 1.5 * score_importance_for(player_opponent)

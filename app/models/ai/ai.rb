@@ -23,9 +23,9 @@ class Ai
       best_move = []
       bestScore = nil
       GameHelper.every_slot_on_boad do |row, col|
-        if reversi.is_move_allowed?(@player_ai, reversi.board, row, col)
-          reversi_clone = DeepClone.clone(@reversi)
-          reversi_clone.set_tile(row, col)
+        if reversi.is_move_allowed?(reversi.player.current, reversi.board, row, col)
+          reversi_clone = DeepClone.clone(reversi)
+          reversi_clone.move(row, col)
           @board = reversi_clone.board
 
           check_score = score_total
