@@ -11,8 +11,8 @@ class Ai
   class << self
     def best_next_move(reversi, level)
       @reversi = reversi
-      @player_ai = reversi.player.tile
-      @player_opponent = Player.get_opponent_tile_for(@player_ai)
+      @player_ai = reversi.player.current
+      @player_opponent = reversi.player.opponent_tile_for(@player_ai)
       get_best_next_move_score(level, reversi)
       @best_next_move[0]
     end

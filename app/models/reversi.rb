@@ -7,8 +7,8 @@ class Reversi
   include GameHelper
   attr_reader :player, :board
   def initialize
-    @player = Player.new(true)
-    @board = Board.new(player_one: @player.tile, player_two: @player.opponent_tile)
+    @player = Player.new({ player_one: 'X', player_two: 'O' })
+    @board = Board.new(player_one: @player.one, player_two: @player.two)
     @gameOver = false
     @level = 3
   end
@@ -16,7 +16,7 @@ class Reversi
   def move(row, col)
     if game_over?
       puts 'game over!'
-    elsif is_move_allowed?(@player.tile, @board, row, col)
+    elsif is_move_allowed?(@player.current, @board, row, col)
       set_tile(row, col)
       next_player
       return true
@@ -60,21 +60,21 @@ class Reversi
   end
 
   def next_player
-    possible_move_for_player?(@player.opponent_tile) ? @player.change_player : @player.tile
+    possible_move_for_player?(@player.opponent_tile) ? @player.change_player : @player.current
   end
 
   def set_tile(row, col)
-    @board.set_tile(row, col, @player.tile)
+    @board.set_tile(row, col, @player.current)
     switch_opponent_tiles(row, col)
   end
 
   def switch_opponent_tiles(row, col)
     GameHelper.direction_loop do |row_direction, col_direction|
-      adjacent_stones = adjacent_stones(@player.tile, row, col, row_direction, col_direction)
+      adjacent_stones = adjacent_stones(@player.current, row, col, row_direction, col_direction)
       next if adjacent_stones.nil?
       until adjacent_stones.empty?
         position = adjacent_stones.pop
-        @board.change_tile(position[:row], position[:col], @player.tile)
+        @board.change_tile(position[:row], position[:col], @player.current)
       end
     end
   end
@@ -100,7 +100,7 @@ class Reversi
   end
 
   def move_possibility?
-    possible_move_for_player?(@player.tile) || possible_move_for_player?(@player.opponent_tile)
+    possible_move_for_player?(@player.current) || possible_move_for_player?(@player.opponent_tile)
   end
 
   def get_tile(row, col)

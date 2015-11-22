@@ -9,7 +9,7 @@ module Potential
 
   def self.score_potential_for(player)
     potential_count = 0
-    @board.tile_positions(Player.get_opponent_tile_for(player)).each do |tile|
+    @board.tile_positions(@reversi.player.opponent_tile_for(player)).each do |tile|
       potential_count += count_surrounding_empty_slots(tile[:row], tile[:col])
     end
     potential_count

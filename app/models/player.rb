@@ -1,22 +1,20 @@
 class Player
-  attr_reader :tile
-  def initialize(is_first)
-    if is_first
-      @tile = 'X'
-    else
-      @tile = 'O'
-    end
+  attr_reader :current, :one, :two
+  def initialize(args)
+    @one = args.fetch :player_one
+    @two = args.fetch :player_two
+    @current = @one
   end
 
   def opponent_tile
-    @tile == 'O' ? 'X' : 'O'
+    @current == @one ? @two : @one
   end
 
-  def self.get_opponent_tile_for(player)
-    player == 'O' ? 'X' : 'O'
+  def opponent_tile_for(player)
+    player == @one ? @two : @one
   end
 
   def change_player
-    @tile == 'O' ? @tile = 'X' : @tile = 'O'
+    @current == @one ? @current = @two : @current = @one
   end
 end
