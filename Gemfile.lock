@@ -1,11 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    atk (3.0.7)
+      glib2 (= 3.0.7)
+    cairo (1.14.3)
+      pkg-config (>= 1.1.5)
     coderay (1.1.0)
     diff-lcs (1.2.5)
     ffi (1.9.10)
     ffi (1.9.10-java)
     formatador (0.2.5)
+    gdk_pixbuf2 (3.0.7)
+      glib2 (= 3.0.7)
+    glib2 (3.0.7)
+      pkg-config
+    green_shoes (1.1.374)
+      gtk2
+    gtk2 (3.0.7)
+      atk (= 3.0.7)
+      gdk_pixbuf2 (= 3.0.7)
+      pango (= 3.0.7)
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -33,6 +47,10 @@ GEM
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    pango (3.0.7)
+      cairo (>= 1.14.0)
+      glib2 (= 3.0.7)
+    pkg-config (1.1.6)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -70,6 +88,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  green_shoes (~> 1.1, >= 1.1.374)
   guard
   guard-bundler
   guard-rspec
